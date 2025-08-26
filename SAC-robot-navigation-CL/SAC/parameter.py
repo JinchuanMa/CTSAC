@@ -15,7 +15,7 @@ def get_parameters():
     parser.add_argument('--capacity', default=1e5, type=int)                  # replay buffer size
     parser.add_argument('--iteration', default=5000000, type=int)             # num of  games(episode)
     parser.add_argument('--batch_size', default=256, type=int)                # mini batch size
-    parser.add_argument('--key_num', default=10, type=int)                    # sequence length
+    parser.add_argument('--keys_num', default=10, type=int)                    # sequence length
     parser.add_argument('--seed', default=1, type=int)
     
     parser.add_argument('--log_interval', default=300, type=int)              # Save the model once in episode
