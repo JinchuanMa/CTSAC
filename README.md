@@ -13,7 +13,7 @@ https://github.com/user-attachments/assets/057dd9fc-dfca-4799-b5ae-0f20a0aae710
 
 ROS Noetic on Ubuntu 20.04
 
-Pytorch 3.8
+Python 3.8
 
 ### 1 Clone the repository：
 
@@ -46,7 +46,7 @@ source ./devel/setup.bash
 
 cd ../SAC
 
-python3 velodyne_train.py
+python3 velodyne_trainer.py
 ```
 
 The first run will be a bit slow because it needs to download the relevant models in gazebo, which takes about 10 minutes.
