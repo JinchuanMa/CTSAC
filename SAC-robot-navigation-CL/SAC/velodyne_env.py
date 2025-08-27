@@ -143,7 +143,7 @@ class GazeboEnv:
 
     def create_robot_launch(self, robot_name, model, position, collide_bitmask):
         def launch_robot():
-            launch_file_path = "/home/jetson/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/launch/turtlebot3_model.launch"
+            launch_file_path = "/home/jinchuanma/CTSAC/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/launch/turtlebot3_model.launch"
             port             = "11311" 
             cli_args         = [launch_file_path, 'model:={}'.format(model), 'multi_robot_name:={}'.format(robot_name), 'robot_position:={}'.format(position), 'collide_bitmask:={}'.format(collide_bitmask)]
             command          = ["roslaunch", "-p", port] + cli_args
@@ -547,7 +547,7 @@ class GazeboEnv:
 
 def check_pose(x, y, map_index, radius=45):
     
-    map_yaml_file = f'/home/jetson/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models/maps/map_{map_index}/map.yaml'
+    map_yaml_file = f'/home/jinchuanma/CTSAC/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models/maps/map_{map_index}/map.yaml'
     # 读取yaml文件
     with open(map_yaml_file, 'r') as stream:
         map_data = yaml.safe_load(stream)
