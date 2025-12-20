@@ -22,7 +22,7 @@ class Velodyne_Trainer():
         self.state_dim     = self.environment_dim + self.robot_dim   
         self.action_dim    = 2                                       
         self.max_action    = 1                                       
-        self.max_iteration = [300, 450, 500, 600, 700, 900, 900]     
+        self.max_iteration = [300, 450, 500, 600, 700, 900]     
         self.file_name     = "SAC_velodyne"                          
         self.env.test_mode = 0                                       
 
@@ -98,11 +98,11 @@ class Velodyne_Trainer():
                 recent_successes.pop(0) 
             if len(recent_successes) > 30:
                 success_rate = sum(recent_successes) / len(recent_successes)
-                if success_rate > 0.8 and self.env.map_index < 6:
+                if success_rate > 0.8 and self.env.map_index < 5:
                     self.env.map_index_update = True
                     recent_successes = []
                     self.replay_buffer.clear()
-                if success_rate > 0.95 and self.env.current_map_level == 6:
+                if success_rate > 0.95 and self.env.current_map_level == 5:
                     self.network.save()
                     print("*****************")
                     print("Training is done!")
