@@ -58,7 +58,7 @@ class GazeboEnv:
         self.map_index_update     = False                                  
         self.map_indices          = []                                     
         self.probabilities        = []                                     
-        self.models               = ["map0"]                               
+        self.models               = []                               
         self.old_models           = []                                     
         self.distance_threshold   = args.distance_threshold                
         self.collect_position     = []                                     
@@ -191,7 +191,7 @@ class GazeboEnv:
                     initial_pose.orientation.w = obj['qw']
                     self.spawn_model(obj['name'], model_xml, '', initial_pose, "world")
 
-            if self.map_index_update and self.current_map_level < 6:  
+            if self.map_index_update and self.current_map_level < 5:  
                 self.current_map_level += 1
                 self.map_indices        = list(range(self.current_map_level + 1))
                 self.probabilities      = [(i + 1)**2 for i in self.map_indices]
