@@ -337,8 +337,8 @@ class GazeboEnv:
                 object_state.pose.orientation.z = quaternion.z
                 object_state.pose.orientation.w = quaternion.w
                 self.set_state.publish(object_state)
-                self.odom_x = x            
-                self.odom_y = y
+                self.odom_x = robot_x            
+                self.odom_y = robot_y
             
             self.goal_x = target_x
             self.goal_y = target_y
@@ -422,8 +422,8 @@ class GazeboEnv:
 
         goal_ok = False
         while not goal_ok:
-            self.goal_x = random.uniform(self.upper, self.lower)
-            self.goal_y = random.uniform(self.upper, self.lower)
+            self.goal_x = random.uniform(self.lower, self.upper)
+            self.goal_y = random.uniform(self.lower, self.upper)
             goal_ok     = check_pose(self.goal_x, self.goal_y, self.map_index)
 
     def random_box(self):
