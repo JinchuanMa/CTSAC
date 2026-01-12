@@ -27,11 +27,15 @@ class PositionalEncoding(nn.Module):
         div_term = torch.exp(torch.arange(0, embed_dim, 2).float() * (-math.log(10000.0) / embed_dim))
         pe[:, 0::2] = torch.sin(position * div_term)
         pe[:, 1::2] = torch.cos(position * div_term)
-        pe = pe.unsqueeze(0).transpose(0, 1)
+        # pe = pe.unsqueeze(0).transpose(0, 1)
+        # 原代码: pe = pe.unsqueeze(0).transpose(0, 1) -> (max_len, 1, embed_dim)
+        # 新代码: 保持 (1, max_len, embed_dim)，以便广播加到 (batch, seq, embed_dim) 上
+        pe = pe.unsqueeze(0)
         self.register_buffer('pe', pe)
 
     def forward(self, x):
-        x = x + self.pe[:x.size(0), :]
+        # x = x + self.pe[:x.size(0), :]
+        x = x + self.pe[:, :x.size(1)]
         return x
 
 class EncoderBlock(nn.Module):
