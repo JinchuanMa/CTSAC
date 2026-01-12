@@ -37,7 +37,8 @@ class PositionalEncoding(nn.Module):
 class EncoderBlock(nn.Module):
     def __init__(self, embed_dim, n_heads, dropout):
         super(EncoderBlock, self).__init__()
-        self.attention = nn.MultiheadAttention(embed_dim, n_heads, dropout=dropout)
+        # self.attention = nn.MultiheadAttention(embed_dim, n_heads, dropout=dropout)
+        self.attention = nn.MultiheadAttention(embed_dim, n_heads, dropout=dropout, batch_first=True)
         self.ln1 = nn.LayerNorm(embed_dim)
         self.ff = nn.Sequential(
             nn.Linear(embed_dim, 4 * embed_dim),
@@ -67,9 +68,11 @@ class Encoder(nn.Module):
 class DecoderBlock(nn.Module):
     def __init__(self, embed_dim, n_heads, dropout):
         super(DecoderBlock, self).__init__()
-        self.self_attention = nn.MultiheadAttention(embed_dim, n_heads, dropout=dropout)
+        # self.self_attention = nn.MultiheadAttention(embed_dim, n_heads, dropout=dropout)
+        self.self_attention = nn.MultiheadAttention(embed_dim, n_heads, dropout=dropout, batch_first=True)
         self.ln1 = nn.LayerNorm(embed_dim)
-        self.enc_dec_attention = nn.MultiheadAttention(embed_dim, n_heads, dropout=dropout)
+        # self.enc_dec_attention = nn.MultiheadAttention(embed_dim, n_heads, dropout=dropout)
+        self.enc_dec_attention = nn.MultiheadAttention(embed_dim, n_heads, dropout=dropout, batch_first=True)
         self.ln2 = nn.LayerNorm(embed_dim)
         self.ff = nn.Sequential(
             nn.Linear(embed_dim, 4 * embed_dim),
@@ -295,17 +298,17 @@ class SAC():
 
             # mini batch gradient descent
             self.value_optimizer.zero_grad()
-            V_loss.backward(retain_graph=True)
+            V_loss.backward()
             nn.utils.clip_grad_norm_(self.value_net.parameters(), 0.5)
             self.value_optimizer.step()
 
             self.Q1_optimizer.zero_grad()
-            Q1_loss.backward(retain_graph = True)
+            Q1_loss.backward()
             nn.utils.clip_grad_norm_(self.Q_net1.parameters(), 0.5)
             self.Q1_optimizer.step()
 
             self.Q2_optimizer.zero_grad()
-            Q2_loss.backward(retain_graph = True)
+            Q2_loss.backward()
             nn.utils.clip_grad_norm_(self.Q_net2.parameters(), 0.5)
             self.Q2_optimizer.step()
             if current_map_level != self.last_map_level:
