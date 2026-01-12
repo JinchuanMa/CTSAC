@@ -152,19 +152,23 @@ class GazeboEnv:
         p.start()
 
     def create_velodyne_callback(self, robot_id):                                          
-        def velodyne_callback(v):                                                          
-            data = list(pc2.read_points(v, skip_nans=False, field_names=("x", "y", "z"))) 
-            velodyne_data = np.ones(self.environment_dim) * 10                             
-            for i in range(len(data)):                                                     
-                if data[i][2] > FILTER_GROUND_HEIGHT:                                        
-                    dot = data[i][0] * 1 + data[i][1] * 0                                  
-                    mag1 = math.sqrt(math.pow(data[i][0], 2) + math.pow(data[i][1], 2))    
-                    mag2 = math.sqrt(math.pow(1, 2) + math.pow(0, 2))                      
-                    beta = math.acos(dot / (mag1 * mag2)) * np.sign(data[i][1])            
-                    dist = math.sqrt(data[i][0] ** 2 + data[i][1] ** 2 + data[i][2] ** 2)  
+        def velodyne_callback(v):
+            data = list(pc2.read_points(v, skip_nans=False, field_names=("x", "y", "z")))
+            velodyne_data = np.ones(self.environment_dim) * 10
+            for i in range(len(data)):
+                if data[i][2] > FILTER_GROUND_HEIGHT:
+                    # 使用 atan2 计算角度，范围 [-π, π]
+                    beta = math.atan2(data[i][1], data[i][0])
+                    
+                    # 将 [-π, -π/2) 范围的角度转换到 [π, 3π/2)
+                    # 使 beta 范围从 [-π, π] 变为 [-π/2, 3π/2]
+                    if beta < -np.pi / 2:
+                        beta += 2 * np.pi
+                    
+                    dist = math.sqrt(data[i][0] ** 2 + data[i][1] ** 2 + data[i][2] ** 2)
                     for j in range(len(self.gaps)):
-                        if self.gaps[j][0] <= beta < self.gaps[j][1]:                      
-                            velodyne_data[j] = min(velodyne_data[j], dist)                 
+                        if self.gaps[j][0] <= beta < self.gaps[j][1]:
+                            velodyne_data[j] = min(velodyne_data[j], dist)
                             break
             setattr(self, f"velodyne_data_{robot_id}", velodyne_data)
         return velodyne_callback
