@@ -46,7 +46,7 @@ source ./devel/setup.bash
 
 cd ../SAC
 
-python3 velodyne_trainer.py
+python3 velodyne_trainer.py --save --random_robot_position
 ```
 
 The first run will be a bit slow because it needs to download the relevant models in gazebo, which takes about 10 minutes.
